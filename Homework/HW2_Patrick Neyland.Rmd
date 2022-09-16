@@ -1,0 +1,146 @@
+---
+title: "Homework 2"
+author: "Patrick Neyland"
+date: '2022-09-07'
+output:
+  word_document: default
+  pdf_document: default
+---
+```{r include=FALSE,}
+knitr::opts_chunk$set(
+  comment = NA
+)
+library(wooldridge)
+library(tidyverse)
+# library(stargazer)
+```
+
+## Question 1
+Replicate the following vector of numbers using seq() function and call it v1.
+```{r}
+v1 <- seq(1,17,4)
+v1
+```
+## Question 2
+
+### Part (I)
+```{r comment=NA}
+A <- matrix(seq(20,39,1), nrow = 4, ncol = 5, byrow = T)
+A
+```
+
+### Part (II)
+```{r comment=NA}
+colnames(A) <- LETTERS[1:5]
+A
+```
+
+### Part (III)
+```{r comment=NA}
+B <- A[c(2,4),c(2,4)]
+B
+```
+
+### Part (IV)
+```{r comment=NA}
+B <- t(B)
+B
+```
+
+### Part (V)
+```{r comment=NA}
+B_inverse <- solve(B)
+B_inverse
+```
+
+### Part (VI)
+```{r comment=NA}
+round(B %*% B_inverse)
+# Identity matrix
+```
+
+## Question 3
+### Part (I) 
+Assign the dataframe mtcars from the built-in datasets in R to a new dataframe
+and call it df. Show the first 10 rows of your dataframs:
+```{r , comment=NA}
+df <- mtcars
+head(df, 10)
+```
+### Part (II)
+Make a new dataframe based on df and call it df1. Show the first 5 rows of df1.
+```{r}
+df1 <- df %>% select(c(cyl,hp,wt,vs,am,gear,mpg)) %>% arrange(cyl)
+df1[1:5,]
+```
+### Part (III)
+In df1 make a new column called gpm. Show the first 5 rows again.
+```{r}
+df1 <- df1 %>% mutate(df1,gpm = round(1/mpg,3))
+head(df1, 5)
+```
+### Part (IV)
+Show the structure of df1.
+```{r}
+str(df1)
+```
+### Part (V)
+Change the type of the following variables (vs, am, cyl, gear) from num to
+factor. Show the structure of df1 again.
+```{r}
+factors <- c('vs','am','cyl','gear')
+df1[,factors] <- lapply(df1[,factors],factor)
+str(df1)
+```
+## Question 4
+### Part (I)
+What is percentage of the men in the sample report abusing alcohol?
+```{r comment=NA}
+tb1 <- table(alcohol$abuse)
+ptb1 <- prop.table(tb1)*100
+ptb1[2]
+```
+### Part (II)
+What is the employment rate?
+```{r comment=NA}
+df2 <- alcohol %>% filter(status != 1)
+tb2 <- table(df2$status)
+ptb2 <- prop.table(tb2)*100
+ptb2[2]
+
+```
+### Part (III)
+Consider the group of men who abuse alcohol. What is the employment rate?
+```{r comment=NA}
+df3 <- df2 %>% filter(abuse == 1)
+tb3 <- table(df3$status)
+ptb3 <- prop.table(tb3)*100
+ptb3[2]
+# Using a 2 variable prop.table makes this problem and the next
+# a little more simple
+tb6 <- table(df2$abuse, df2$status)
+ptb6 <- prop.table(tb6,1)
+ptb6
+ptb6[2,2]*100
+```
+
+
+### Part (IV)
+What is the employment rate for the group of men who do not abuse alcohol?
+```{r comment=NA}
+df4 <- df2 %>% filter(abuse != 1)
+tb4 <- table(df4$status)
+ptb4 <- prop.table(tb4)*100
+ptb4[2]
+
+# with prop table
+ptb6[1,2]*100
+```
+
+### Part (V)
+Discuss the difference in your answers to parts (III) and (IV). Does this allow you
+to conclude that alcohol abuse causes unemployment?
+
+No, you cannot conclude this causation because the causation may be in either direction. Causation may also be from other variables.  
+
+
