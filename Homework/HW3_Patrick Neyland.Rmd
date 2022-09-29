@@ -11,18 +11,34 @@ library(tidyverse)
 ```
 # Appendix A
 ## Question 1
-### Setup
+### Part i
 ```{r}
-df <- data.frame(Family = c(1,2,3,4,5,6,7,8,9,10),"Monthly Expenditures" = c(300,440,350,1100,640,480,450,700,670,530))
-avg_exp <- mean(df$Monthly.Expenditures)
-med_exp <- median(df$Monthly.Expenditures)
-mean((df$Monthly.Expenditures)*100)
-avg_exp*100
-med_exp*100
-df2 <- data.frame(Family = c(1,2,3,4,5,6,7,8,9,10),"Monthly Expenditures" = c(300,440,350,1100,640,480,450,900,670,530))
-avg_exp2 <- mean(df2$Monthly.Expenditures)
+df <- c(300,440,350,1100,640,480,450,700,670,530)
+avg_exp <- mean(df)
+avg_exp
+```
+Average monthly expenditures is 566.
+
+### Part ii
+```{r}
+med_exp <- median(df)
+med_exp
+```
+Median monthly expenditures is 505.
+
+### Part iii
+```{r}
+mean((df/100))
+median((df/100))
+```
+They would each be divided by 100---becoming 5.66 and 6.05, respectively. 
+
+### Part iv
+```{r}
+df[8] = 900
+avg_exp2 <- mean(df)
 avg_exp2
-med_exp2 <- median(df2$Monthly.Expenditures)
+med_exp2 <- median(df)
 med_exp2
 ```
 The mean is increased by 20 while the median does not change. 
@@ -31,67 +47,58 @@ The mean is increased by 20 while the median does not change.
 ## Question 2
 ###
 ```{r}
-100*1.15
-
-115*1.18
-135.7/115
-
-
-.18/.15
-.15*1.2
+.18-.15
+(.18-.15)/.15
 ```
-
+The majority shareholder considered the absolute change in percent return---.18-.15=.03
+The CEO considered the relative change in percent return---.18-.15/.15=.2
 
 ## Question 3
 ### Part (i)
 
 ```{r}
-exper1 <- 0
-exp_0 <- exp(10.6+(0.027*exper1))
-exper2 <- 5
-exp_5 <- exp(10.6+(0.027*exper2))
+salary <- function(exper) {exp(10.6+(0.027*exper))} 
+salary(c(0,5))
 ```
-The salary when $education=0$ 
-
-#How to eliminate scientific notation in markdown output. 
-
-
-```{r}
-salary <- function(education) {
-  exp(10.3+(0.06*education))
-}
-
-salary(0)
-
-exp1 <- 0
-exp0 <- exp(10.3+(0.6))
-```
-
+The salary when $education=0$ is 40,134.84 while the salary when $exper=5$ is 45,935.80.
 
 ### Part (ii)
 ```{r}
-(100*0.027)*5
+dy <- function(dx){(100*0.027)*dx}
+dy(5)
 ```
 ### Part (iii)
 ```{r}
-((exp_5-exp_0)/exp_0)*100
+((salary(5)-salary(0))/salary(0))*100
 ```
-The estimator gives a change on 13.5 percent while the model has a change of 14.45 percent. 
+The estimator gives a change on 13.5 percent while the model has a change of 14.45 percent.
 
 ## Question 4
 ### Part (i)
 ```{r}
-pnorm(5,3,sqrt(2), lower.tail = TRUE)
+pnorm(6,5,sqrt(4), lower.tail = TRUE)
 ```
 ### Part (ii)
 ```{r}
-pnorm(2,3,sqrt(2), lower.tail = FALSE)
+pnorm(4,5,sqrt(4), lower.tail = FALSE)
 ```
 ### Part (iii)
 ```{r}
-pnorm(3,mean= 3,sd = sqrt(2)) + (pnorm(5,mean = 3,sd = sqrt(2), lower.tail = FALSE))
+pnorm(4,mean= 5,sd = sqrt(4)) + (pnorm(6,mean = 5,sd = sqrt(4), lower.tail = FALSE))
 ```
 
 ## Question 5
+```{r}
+F <- function(x) {
+ (3*(x^2))-(2*(x^3))
+}
+1-F(.6)
+```
+The probability that the elderly employment rate is at least 60 percent is 0.352
 
-1-F(.57)
+## Question 6 
+```{r}
+52.3*1000
+14.6*1000
+```
+The mean and standard deviation are both just multiplied by 1,000. 
