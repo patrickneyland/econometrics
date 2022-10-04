@@ -1,0 +1,165 @@
+---
+title: "HW4_Patrick Neyland"
+author: "Patrick Neyland"
+date: '2022-09-13'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+library(tidyverse)
+library(wooldridge)
+library(stargazer)
+```
+## Question 1
+### Part i
+Interpret the coefficient on log(dist). Is the sign of this estimate what you expect
+it to be?
+
+This model is an example of one that has undergone a log-log transformation---A 1.000 percent increase in distance from the garbage incinerator, holding all else constant, will result in 0.132 percent in price on average. This coefficient is expected---on average, people want to live far away from a presumably stinky and ugly garbage handling facility.
+
+### Part ii
+What other factors about a house affect its price? Might these be correlated with
+distance from the incinerator?
+
+Proximity to grocery stores, schools, and rec centers will also affect the price of a home---these specific factors might be correlated with distance from the incinerator. I would imagine that most businesses would also want to be located far away from any garbage handling facilities. 
+
+### Part iii
+Do you think simple regression provides an unbiased estimator of the ceteris
+paribus elasticity of price with respect to dist? (Think about the city's decision
+on where to put the incinerator. Hint: which of the SLR assumptions is/are
+violated?)
+
+
+## Question 2
+
+```{r}
+
+x<- 1:30
+y <- c(1)
+for (i in x){
+  y[i] <- 1.1*tail(y,1)
+}
+y
+library(jtools)
+#summ(lm(y~x))
+
+#stargazer(lm(y~x), lm(log(y)~x), type="text")
+```
+
+## Question 3
+
+### Part i
+Find the average participation rate and the average match rate in the sample of plans.
+```{r}
+mean(k401k$prate)
+mean(k401k$mrate)
+```
+The average participation rate is 87.36291 percent. 
+The average match rate is 73.15124 percent.
+
+### Part ii
+Now, estimate the simple regression equation [prate = ^ 0 + ^ 1mrate and report the results along with the sample size and R-squared
+```{r}
+model3_2 <- lm(prate~mrate,k401k)
+#stargazer(reg_3_2, type = "text")
+```
+### Part iii
+Interpret the intercept in your equation. Interpret the coefficient on $mrate$.
+The intercept is the is the average participation rate when $mrate$ is zero. 
+The coefficient of $mrate$ shows that on average, a one unit increase in $mrate$, holding all else constant, will result in a 5.861 percent increase in participation rate. 
+
+
+### Part iv
+```{r}
+prate <- function(mrate) {83.075 + 5.861*mrate}
+prate(3.5)
+```
+The predicted $prate$ when $mrate = 3.5$ is 103.5885 percent. This is not a reasonable prediction because in reality, $prate$ cannot exceed 100 percent.  
+
+### Part v
+7.5 percent of the variation in prate is explain by mrate. This does not seem like a lot to me. 
+
+
+## Question 4
+
+### Part i
+Do you think each additional dollar spent has the same effect on the pass rate, or
+does a diminishing effect seem more appropriate? Explain.
+
+I think a diminishing effect seems more appropriate. At the beginning each dollar makes a really big difference---buying books, pencils, paper, and basic computers open tremendous opportunities for the students to learn and develop their skills. However, spending an additional $2,000 per student on a fancier computer lab will likely have little impact on test scores because it would not offer significantly more practical functionality than the normal computer lab. 
+```{r}
+model4_2 <- lm(math10~log(expend), data = meap93)
+summary(model4_2)
+```
+
+
+
+
+## Question 5
+
+### Part i
+What is the average gift in the sample of 4,268 people (in Dutch guilders)? What
+percentage of people gave no gift?
+```{r}
+mean(charity$gift)
+tb1 <- table(charity$respond)
+prop.table(tb1)
+```
+The average gift in the sample is worth 7.44 Dutch guilders. 
+The percentage of people who gave no gift is 39.99531 percent. 
+
+### Part ii
+```{r}
+mean(charity$mailsyear)
+min(charity$mailsyear)
+max(charity$mailsyear)
+```
+The average number of mailings per year is 2.05. 
+The minimum mailings per year is 0.25.
+The maximum mailings per year is 3.5.
+
+### Part iii
+```{r}
+model5_3 <- lm(gift~mailsyear, data = charity)
+stargazer(model5_3, type = "text")
+```
+
+### Part iv
+Interpret the slope coefficient. If each mailing costs one guilder, is the charity
+expected to make a net gain on each mailing? Does this mean the charity makes
+a net gain on every mailing? Explain.
+
+On average, holding all else constant, if the number of mailings per year increases by 1 unit, the amount of gift will increase by 2.65 guilders. 
+
+
+## Question 6
+
+### Part i
+```{r}
+count(catholic)
+mean(catholic$math12)
+sd(catholic$math12)
+mean(catholic$read12)
+sd(catholic$read12)
+```
+The sample size 7430 students. 
+The average math score is 52.13362.
+The standard deviation of math scores is 9.459117.
+The average reading score is 51.7724.
+The standard deviation of reading scores is 9.407761.
+
+### Part ii
+```{r}
+model6_2 <- lm(math12~read12, data = catholic)
+stargazer(model6_2, type = "text")
+```
+BEta hat zero = 15.153
+beta hat one = 0.714
+n = 7430
+R squared = 0.505
+
+### Part iii
+It does not have a meaningful interpretating. It is the estimated average math score of students with a score of 0 on the reading test. However, the minimum reading score in the sample was 29.15
+It does have a meaningful interpretation---the students who scored 0 on the reading 
+
