@@ -1,0 +1,124 @@
+---
+title: "HW5-Patrick Neyland"
+author: "Patrick Neyland"
+date: '2022-10-04'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA, options(scipen = 999))
+library(wooldridge)
+library(stargazer)
+library(tidyverse)
+```
+## Question 1
+
+### Part i
+The sign will be negative---as an adult works more, they will get less sleep. 
+
+### Part ii
+I think $\beta_2$ will be positive, however, I do not think it will be statistically significant. 
+I think $\beta_3$ will be negative---the older someone gets, the less sleep they need. 
+
+
+### Part iii
+The number of minutes is predicted to fall by `r 5*60*0.148` minutes. 
+
+### Part iv
+Getting one more year of education, on average, holding all else constant, will result in a 11.13 minute decrease in the amount of sleep each week. 
+
+### Part v
+Definitely not. With an $R^2$ of just 0.113, only 11.3 percent of the variation of sleep can be explained by these variables. 
+
+## Question 2
+### Part i
+Because the order of rank is in reverse numerical order. The higher the number of the rank for a particular school, the lower its rank. 
+### Part ii
+I expect $\beta_1$ to be positive.
+I expect $\beta_2$ to be positive.
+I expect $\beta_3$ to be positive. 
+I expect $\beta_4$ to be positive. Cost of attendance is usually correlated with prestige and sometimes with quality of education. If a school is both prestigious and offers a quality education, I would expect its graduates to be offered high salaries. 
+
+### Part iii
+If the median $GPA$ increases by one point, on average, the ceteris paribus difference in median salary will be an increase of 24.8 percent. 
+
+### Part iv
+As the number of volumes in the library increases by 1 percent, on average, holding all else constant, the median starting salary will increase by 0.095 percent. 
+
+### Part v
+I thinking ranking does matter to some extent, but perhps not as much as name recognition among the first you are interested in working in is. In this model, a 20 ranking difference would result in a `r 20*.0033*100` percent change in predicted starting salary. TO be honest, that difference does not seem to be significant. Other variables would be much better predictors. 
+
+
+
+
+## Question 3
+
+The sample size is smaller so the variance of the model will be larger, leading to a smaller $R^2$.
+FACT: As k increases, R squared is going to increase as long as correlation between x_j and y is not equal to zero. 
+
+However, different sample sizes cannot be compared against eachother. These two models are working with different data, the model with 
+
+### Question 4
+```{r}
+model4_1 <- lm(price ~ sqrft + bdrms, data = hprice1)
+stargazer(model4_1, type = "text")
+```
+$\hat{price}=-19.135+0.128(sqrft)+15.198(bdrms)$  
+
+### Part ii
+
+The estimated increase in price will be $15,198.
+
+### Part iii
+
+The new increase with the sqrft specified for the new bedroom is $`r ((0.128*140) + 15.198)*1000` The result from this specification is much larger than in part ii because in part 2, it is assumed that the sqrft of the house remains the same despite the additional bedroom. 
+
+### Part iv
+
+63.2 percent
+
+### Part v
+
+```{r}
+new_df <- data.frame(sqrft = c(2438), bdrms = c(4))
+predict(model4_1, new_df)
+354.6052*1000
+```
+The predicted selling price for the OLS model with the given parameters is $354,605.20
+
+### Part vi
+
+```{r}
+new_df2 <- data.frame(sqrft = c(2438), bdrms = c(4))
+```
+
+They underpaid. 
+
+## Question 5
+### Part i
+```{r}
+summary(discrim$prpblck)
+
+
+
+stargazer(lm(psoda~prpblck+income, discrim), type = "text", digits = 7)
+#stargazer(lm(speed~dist, data = cars), type = "text")
+```
+
+If the prop of black people increases by 100 percent, or double of the population, then psoda will increase by 11 cents. 
+
+```{r}
+stargazer(lm(psoda~prpblck, discrim), type = "text", digits = 7)
+```
+Larger when controlled for income. 
+
+### Part iv
+```{r}
+stargazer(lm(log(psoda)~prpblck+log(income), discrim), type = "text", digits = 7)
+```
+`r 0.1215803*100*.2`
+### Part 5
+```{r}
+cor(discrim$income, discrim$prppov)
+```
+

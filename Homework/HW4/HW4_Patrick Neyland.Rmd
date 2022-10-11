@@ -10,76 +10,93 @@ knitr::opts_chunk$set(comment = NA)
 library(tidyverse)
 library(wooldridge)
 library(stargazer)
+library(jtools)
 ```
 ## Question 1
-### Part i
-Interpret the coefficient on log(dist). Is the sign of this estimate what you expect
-it to be?
+### Part (i) 
+Interpret the coefficient on $log(dist)$. Is the sign of this estimate what you expect it to be?
 
-This model is an example of one that has undergone a log-log transformation---A 1.000 percent increase in distance from the garbage incinerator, holding all else constant, will result in 0.132 percent in price on average. This coefficient is expected---on average, people want to live far away from a presumably stinky and ugly garbage handling facility.
+This model is an example of one that has undergone a log-log transformation---A 1% increase in distance from the garbage incinerator, holding all else constant, will result in 0.132% increase in price on average. This coefficient is expected---on average, people want to live far away from a presumably stinky and ugly garbage handling facility.
 
-### Part ii
-What other factors about a house affect its price? Might these be correlated with
-distance from the incinerator?
+### Part (ii) 
+What other factors about a house affect its price? Might these be correlated with distance from the incinerator?
 
 Proximity to grocery stores, schools, and rec centers will also affect the price of a home---these specific factors might be correlated with distance from the incinerator. I would imagine that most businesses would also want to be located far away from any garbage handling facilities. 
 
-### Part iii
+### Part (iii) 
 Do you think simple regression provides an unbiased estimator of the ceteris
 paribus elasticity of price with respect to dist? (Think about the city's decision
 on where to put the incinerator. Hint: which of the SLR assumptions is/are
 violated?)
 
+No, it does not provide an unbiased estimator because SLR assumption 4 is violated. The distance from the incinerator is likely correlated with some factor included in the u variable as explained in part ii. 
 
-## Question 2
 
-```{r}
+## Question 2  
+### Part (i) 
+Show that E[u|inc] = 0, so that the key zero condition mean assumption is satisfied.
 
-x<- 1:30
-y <- c(1)
-for (i in x){
-  y[i] <- 1.1*tail(y,1)
-}
-y
-library(jtools)
-#summ(lm(y~x))
+$$E[u|inc] = E[\sqrt{inc}*e|inc]$$
+$$ = E[\sqrt{inc}|inc]*E[e|inc]$$
+$$ = E[\sqrt{inc}|inc]*E[e]$$
+$$ = E[\sqrt{inc}|inc]*0$$
+$$ = 0$$
+Therefore, $E[u|inc]$ is equal to $0$. 
+  
+### Part ii
+Show that V ar(u|inc) = $\sigma_e^2$
+einc, so that the homoskedasticity Assumption SLR.5 is
+violated. In particular, the variance of savings increases with inc. [Hint: Var(e|inc) =
+Var(e) if e and inc are independent].
 
-#stargazer(lm(y~x), lm(log(y)~x), type="text")
-```
+$$Var[u|inc] = Var[\sqrt{inc}*e|inc]$$
+$$ = (\sqrt{inc})^2*Var[e|inc]$$
+$$ = \sigma_e^2$$
+
+### Part (iii) 
+Provide a discussion that supports the assumption that the variance of savings
+increases with family income.
+
+As family income increases, the choice of savings amount also increase. Once a family has met its basic needs, it may choose to save any amount it would like. More disposable income will lead to a greater variance in savings because there will be more savings options. 
 
 ## Question 3
 
-### Part i
+### Part (i) 
 Find the average participation rate and the average match rate in the sample of plans.
-```{r}
-mean(k401k$prate)
-mean(k401k$mrate)
-```
-The average participation rate is 87.36291 percent. 
-The average match rate is 73.15124 percent.
 
-### Part ii
-Now, estimate the simple regression equation [prate = ^ 0 + ^ 1mrate and report the results along with the sample size and R-squared
-```{r}
-model3_2 <- lm(prate~mrate,k401k)
-#stargazer(reg_3_2, type = "text")
+```{r include=FALSE}
+mean(k401k$prate)
+round(mean(k401k$mrate),4)*100
 ```
-### Part iii
-Interpret the intercept in your equation. Interpret the coefficient on $mrate$.
-The intercept is the is the average participation rate when $mrate$ is zero. 
+The average participation rate is `r round(mean(k401k$prate),2)` percent. 
+The average match rate is `r round(mean(k401k$mrate),4)*100` percent.
+
+### Part (ii) 
+Now, estimate the simple regression equation $\hat{prate}=\hat{\beta_0}+\hat{\beta_1} mrate$ and report the results along with the sample size and R-squared
+```{r}
+model3_2 <- lm(prate~mrate,data = k401k)
+stargazer(model3_2, type = "text")
+```
+### Part (iii) 
+Interpret the intercept in your equation. Interpret the coefficient on $mrate$.  
+
+The intercept(83.075) is the is the average participation rate when $mrate$ is zero. 
 The coefficient of $mrate$ shows that on average, a one unit increase in $mrate$, holding all else constant, will result in a 5.861 percent increase in participation rate. 
 
 
-### Part iv
+### Part (iv)
+Find the predicted prate when $mrate = 3.5$. Is this a reasonable prediction?
+Explain what is happening here.
 ```{r}
 prate <- function(mrate) {83.075 + 5.861*mrate}
 prate(3.5)
 ```
-The predicted $prate$ when $mrate = 3.5$ is 103.5885 percent. This is not a reasonable prediction because in reality, $prate$ cannot exceed 100 percent.  
+The predicted $prate$ when $mrate = 3.5$ is `r round(prate(3.5),2)` percent. This is not a reasonable prediction because in reality, $prate$ cannot exceed 100 percent. The correlation between these two variables is probably not linear. 
 
-### Part v
-7.5 percent of the variation in prate is explain by mrate. This does not seem like a lot to me. 
+### Part (v)
+How much of the variation in prate is explained by $mrate$? Is this a lot in your opinion?  
 
+7.5 percent of the variation in $prate$ is explain by $mrate$. This does not seem like a lot to me---I suppose it depends.
 
 ## Question 4
 
@@ -88,13 +105,26 @@ Do you think each additional dollar spent has the same effect on the pass rate, 
 does a diminishing effect seem more appropriate? Explain.
 
 I think a diminishing effect seems more appropriate. At the beginning each dollar makes a really big difference---buying books, pencils, paper, and basic computers open tremendous opportunities for the students to learn and develop their skills. However, spending an additional $2,000 per student on a fancier computer lab will likely have little impact on test scores because it would not offer significantly more practical functionality than the normal computer lab. 
+
+### Part ii
+In a normal level-log transformation, $\hat{\beta_1}$ needs to be divided by 100
+given a 1% change in $log(x_1)$. Therefore, given a 10% change in $log(x_1)$ would 
+require $\hat{\beta_1}$ be divided by only 10. Making this change keeps the scale accurate.
+
+### Part iii
 ```{r}
-model4_2 <- lm(math10~log(expend), data = meap93)
-summary(model4_2)
+model4_3 <- lm(math10~log(expend), data = meap93)
+stargazer(model4_3, type = "text")
 ```
 
+### Part iv
+The estimated spending effect is 1.1164 percent---this can be interpreted as a 
+10 percent increase in $expend$ will, on average, result in a 1.1164 percent increase
+in $math10$.
 
+### Part v
 
+Because a level-log transformation was used, decreasing returns are presented in this regression. Therefore $math10$ is unlikely to pass 100 percent. 
 
 ## Question 5
 
@@ -104,10 +134,11 @@ percentage of people gave no gift?
 ```{r}
 mean(charity$gift)
 tb1 <- table(charity$respond)
-prop.table(tb1)
+ptb1 <- prop.table(tb1)
+ptb1[1]*100
 ```
-The average gift in the sample is worth 7.44 Dutch guilders. 
-The percentage of people who gave no gift is 39.99531 percent. 
+The average gift in the sample is worth `r round(mean(charity$gift),2)` Dutch guilders.   
+The percentage of people who gave no gift is `r round(ptb1[2]*100,2)` percent. 
 
 ### Part ii
 ```{r}
@@ -115,9 +146,9 @@ mean(charity$mailsyear)
 min(charity$mailsyear)
 max(charity$mailsyear)
 ```
-The average number of mailings per year is 2.05. 
-The minimum mailings per year is 0.25.
-The maximum mailings per year is 3.5.
+The average number of mailings per year is 2.05.   
+The minimum mailings per year is 0.25.  
+The maximum mailings per year is 3.5.  
 
 ### Part iii
 ```{r}
@@ -125,12 +156,11 @@ model5_3 <- lm(gift~mailsyear, data = charity)
 stargazer(model5_3, type = "text")
 ```
 
-### Part iv
-Interpret the slope coefficient. If each mailing costs one guilder, is the charity
-expected to make a net gain on each mailing? Does this mean the charity makes
+### Part (iv) 
+Interpret the slope coefficient. If each mailing costs one guilder, is the charityexpected to make a net gain on each mailing? Does this mean the charity makes
 a net gain on every mailing? Explain.
 
-On average, holding all else constant, if the number of mailings per year increases by 1 unit, the amount of gift will increase by 2.65 guilders. 
+On average, holding all else constant, if the number of mailings per year increases by 1 unit, the amount of gift will increase by 2.65 guilders. Yes, on average, over the entire data set, the net gain per mailer will be 1.65 guilders. No, the charity will not make a net gain on each mailer---some will be more and some will even be a net loss because the regression just gives the average.   
 
 
 ## Question 6
@@ -143,23 +173,32 @@ sd(catholic$math12)
 mean(catholic$read12)
 sd(catholic$read12)
 ```
-The sample size 7430 students. 
-The average math score is 52.13362.
-The standard deviation of math scores is 9.459117.
-The average reading score is 51.7724.
-The standard deviation of reading scores is 9.407761.
+The sample size `r count(catholic)` students.  
+The average math score is `r round(mean(catholic$math12),2)`.  
+The standard deviation of math scores is `r round(sd(catholic$math12),2)`.  
+The average reading score is `r round(mean(catholic$read12),2)`.  
+The standard deviation of reading scores is `r round(sd(catholic$read12),2)`.  
 
 ### Part ii
 ```{r}
 model6_2 <- lm(math12~read12, data = catholic)
 stargazer(model6_2, type = "text")
 ```
-BEta hat zero = 15.153
-beta hat one = 0.714
-n = 7430
-R squared = 0.505
+$\hat{\beta_0}$ = 15.153  
+$\hat{\beta_1}$ = 0.714  
+$n$ = 7430  
+$R^2$ = 0.505  
 
 ### Part iii
-It does not have a meaningful interpretating. It is the estimated average math score of students with a score of 0 on the reading test. However, the minimum reading score in the sample was 29.15
-It does have a meaningful interpretation---the students who scored 0 on the reading 
+It does not have a meaningful interpretation. It is the estimated average math score of students with a score of 0 on the reading test. However, the minimum reading score in the sample was `r min(catholic$read12)`.
+
+### Part iv
+
+I am not surprised by the $\hat{\beta_1}$, I would have assumed that high reading scores would be an indicator of high math scores---high-performing students like to be high-performing in all subject. I am a little surprised by the $R^2$ value. I figured more the reading score would have been a better predictor of math score. 
+
+### Part v
+I would say that a correlation between reading and math does not in anyway indicate a causal relationship. I would point him to other factors that are likely to have a much greater impact on math scores such as the number of math tutors or the levels of additional training offered math teachers. 
+
+
+
 

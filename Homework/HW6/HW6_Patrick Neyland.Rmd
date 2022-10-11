@@ -1,0 +1,33 @@
+---
+title: "HW6 Patrick Neyland"
+author: "Patrick Neyland"
+date: '2022-10-11'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comments = NA, options(scipen = 999))
+```
+
+## Question 1
+
+end of recording in 
+### Part i
+$\theta$ is unbiased. Expected value of theta hat is equal to theta hat. 
+theta hat is equal to beta hat 1 + beta hat 2
+E(theta hat) = E(beta hat 1 +beta hat 2)
+= E(beta hat 1) E(beta hat 2)
+= beta 1 + beta 2 = theta
+
+### Part ii
+going from cov to corr
+Define unbiasedness
+
+### Part ii
+
+
+
+## Question 2
+
+The bias will be negative because I think avg ability will be positive and the correlation between variables is negative. 
+
