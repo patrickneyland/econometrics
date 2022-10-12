@@ -22,22 +22,25 @@ I think $\beta_3$ will be negative---the older someone gets, the less sleep they
 
 
 ### Part iii
-The number of minutes is predicted to fall by `r 5*60*0.148` minutes. 
+The number of minutes is predicted to fall by `r 5*60*0.148` minutes. This doesn't seem to be too big of a tradeoff. Five additional hours while only losing an average of `r 44.4/7` minutes of sleep each night seems worth it---if you are only considering these two factors in the discussion of total utility of ones time. 
 
 ### Part iv
-Getting one more year of education, on average, holding all else constant, will result in a 11.13 minute decrease in the amount of sleep each week. 
+Getting one more year of education, on average, holding all else constant, will result in an 11.13 minute decrease in the amount of sleep each week. 11.13 minutes and a negative sign were both unexpected to me. 
 
 ### Part v
-Definitely not. With an $R^2$ of just 0.113, only 11.3 percent of the variation of sleep can be explained by these variables. 
+Definitely not. With an $R^2$ of just 0.113, only 11.3 percent of the variation of sleep can be explained by these variables. The number of dependents, base salary, and level of community involvement would be other factors that could affect the amount of sleep someone is getting. I think each of these other factors would be correlated with $totwrk$.   
 
 ## Question 2
 ### Part i
-Because the order of rank is in reverse numerical order. The higher the number of the rank for a particular school, the lower its rank. 
+Because the order of rank is in reverse numerical order. The higher the number of the rank for a particular school, the lower its rank. It's a lot like golf, the lower yours score the better.
+
+
 ### Part ii
-I expect $\beta_1$ to be positive.
-I expect $\beta_2$ to be positive.
-I expect $\beta_3$ to be positive. 
-I expect $\beta_4$ to be positive. Cost of attendance is usually correlated with prestige and sometimes with quality of education. If a school is both prestigious and offers a quality education, I would expect its graduates to be offered high salaries. 
+I expect $\beta_1$ to be positive. A high LSAT score is supposed to indicate aptitude in the study of law. Therefore, someone with a high LSAT score would presumably provide more value than someone with a low score.    
+I expect $\beta_2$ to be positive. For the same reasons as my prediction for $\beta_1$ but with a more general interpretation. GPA may indicate aptitude in the study of any subject.    
+I expect $\beta_3$ to be positive. Having more volumes in a library meas that the students have more resources to learn. However, I don't think this one will have a significant impact on the model.    
+I expect $\beta_4$ to be positive. Cost of attendance is usually correlated with prestige and sometimes with quality of education. If a school is both prestigious and offers a quality education, I would expect its graduates to be offered high salaries.    
+
 
 ### Part iii
 If the median $GPA$ increases by one point, on average, the ceteris paribus difference in median salary will be an increase of 24.8 percent. 
@@ -46,17 +49,16 @@ If the median $GPA$ increases by one point, on average, the ceteris paribus diff
 As the number of volumes in the library increases by 1 percent, on average, holding all else constant, the median starting salary will increase by 0.095 percent. 
 
 ### Part v
-I thinking ranking does matter to some extent, but perhps not as much as name recognition among the first you are interested in working in is. In this model, a 20 ranking difference would result in a `r 20*.0033*100` percent change in predicted starting salary. TO be honest, that difference does not seem to be significant. Other variables would be much better predictors. 
+I think ranking does matter to some extent. In this model, a 20 ranking difference would result in a `r 20*.0033*100` percent change in predicted starting salary. The difference does seem significant. I think it is best to attend a school that fits your personal goals and skills. The school where you can be the best student you can be will yield the best salary for you. 
 
-
-
-
+ 
 ## Question 3
 
 The sample size is smaller so the variance of the model will be larger, leading to a smaller $R^2$.
-FACT: As k increases, R squared is going to increase as long as correlation between x_j and y is not equal to zero. 
 
-However, different sample sizes cannot be compared against eachother. These two models are working with different data, the model with 
+FACT: As k increases, $R^2$ is going to increase as long as correlation between $x_j$ and $y$ is not equal to zero. 
+
+However, models with different sample sizes cannot be compared against eachother. These two models are working with different data, the model with
 
 ### Question 4
 ```{r}
@@ -70,8 +72,9 @@ $\hat{price}=-19.135+0.128(sqrft)+15.198(bdrms)$
 The estimated increase in price will be $15,198.
 
 ### Part iii
-
-The new increase with the sqrft specified for the new bedroom is $`r ((0.128*140) + 15.198)*1000` The result from this specification is much larger than in part ii because in part 2, it is assumed that the sqrft of the house remains the same despite the additional bedroom. 
+`r ((0.128*140) + 15.198)*1000` 
+  
+The new increase with the sqrft specified for the new bedroom is `$`33,118 The result from this specification is much larger than in part ii because in part 2, it is assumed that the $sqrft$ of the house remains the same despite the additional bedroom. 
 
 ### Part iv
 
@@ -89,36 +92,60 @@ The predicted selling price for the OLS model with the given parameters is $354,
 ### Part vi
 
 ```{r}
-new_df2 <- data.frame(sqrft = c(2438), bdrms = c(4))
+(300-354.6052)*1000
 ```
-
-They underpaid. 
+The residual is -54,605.2 dollars. The model suggests that the buyer underpaid $54,605.20 for the house.
 
 ## Question 5
 ### Part i
+```{r echo=FALSE}
+mean(discrim$prpblck, na.rm = TRUE)
+mean(discrim$income, na.rm = TRUE)
+sd(discrim$prpblck, na.rm = TRUE)
+sd(discrim$income, na.rm = TRUE)
+```
+The average $prpblck$ is `r round(mean(discrim$prpblck, na.rm = TRUE),2)`.   
+The average $income$ is `r round(mean(discrim$income, na.rm = TRUE),2)`.   
+The standard deviation of $prpblck$ is `r round(sd(discrim$prpblck, na.rm = TRUE),2)`.    
+The standard deviation of $income$ is `r round(sd(discrim$income, na.rm = TRUE),2)`.    
+
+The measure of units for $prpblck$ is proportion on a scale of 0 to 1. 
+The measure of units for $income$ is median income in dollars. 
+
+### Part ii
 ```{r}
-summary(discrim$prpblck)
-
-
-
 stargazer(lm(psoda~prpblck+income, discrim), type = "text", digits = 7)
-#stargazer(lm(speed~dist, data = cars), type = "text")
 ```
 
-If the prop of black people increases by 100 percent, or double of the population, then psoda will increase by 11 cents. 
+If the proportion of black people increases by 100 percent, or double the population, then $psoda$ will increase by 11 cents. This does not seem economically large. 
 
+### Part iii
 ```{r}
 stargazer(lm(psoda~prpblck, discrim), type = "text", digits = 7)
 ```
-Larger when controlled for income. 
+The model from part ii showed an 11.5 cent increase while the model from part iii showed 6.5 cent increase when the black population increases by 100 percent. The discrimination effect was larger when controlled for income. 
 
 ### Part iv
 ```{r}
 stargazer(lm(log(psoda)~prpblck+log(income), discrim), type = "text", digits = 7)
 ```
-`r 0.1215803*100*.2`
-### Part 5
-```{r}
-cor(discrim$income, discrim$prppov)
-```
+The estimated percentage change in $psoda$ would be `r round(0.1215803*100*.2,2)`.   
 
+### Part v
+```{r}
+stargazer(lm(log(psoda)~prpblck+log(income)+prppov, discrim), type = "text", digits = 7)
+```
+$\hat{\beta_{prpblck}}$ drops by `r round(0.1215803-0.0728073,2)`
+
+
+### Part vi
+```{r}
+frame <- data.frame("log_income" = log(discrim$income), "prpov" = discrim$prppov)
+frame <- na.omit(frame)
+cor(frame$log_income, frame$prpov)
+```
+The correlation is -0.839. This is roughly what I expected. 
+
+### Part vii
+
+The multicollinearity of the two variables has no impact on bias and with just two independent variables having that level of correlation, it should also have very little impact on variance. The given statement is not true. 
