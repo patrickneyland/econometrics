@@ -7,11 +7,14 @@ output: word_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(comments = NA, options(scipen = 999))
+library(wooldridge)
+library(stargazer)
+library(tidyverse)
 ```
 
 ## Question 1
 
-end of recording in 
+end of recording on 10/11 
 ### Part i
 $\theta$ is unbiased. Expected value of theta hat is equal to theta hat. 
 theta hat is equal to beta hat 1 + beta hat 2
@@ -26,8 +29,64 @@ Define unbiasedness
 ### Part ii
 
 
-
 ## Question 2
 
 The bias will be negative because I think avg ability will be positive and the correlation between variables is negative. 
 
+
+
+## Question 3
+### Part i
+Model 1 has df of 351
+Model 2 has df of 350
+Because SER is controlling for RBIS. less variance in sigma squared
+
+### Part ii
+Yeah, it makes sense. While having a little more experience can help someone have more RBIs, However
+
+Variance inflation factor
+VIF_year = 1/(1-R^2_year)
+Cor(yr,rbiyr) = 0.487
+R^2 = [Cor(yr,rbiyr)]^2
+R^2 = 0.487^2
+VIF_year = 1/(1-0.237)
+
+```{r}
+1/(1-0.237)
+```
+
+### Part iii
+Because the signma squared are different. 
+
+Square the SER to get Sigma^2
+
+Because we are transition from the
+
+
+## Question 5
+### Part i
+```{r}
+model5_1 <- lm(math4 ~ pctsgle, data = meapsingle)
+stargazer(model5_1, type = "text")
+```
+The effect of single parenthood seems large.
+
+### Part ii
+```{r}
+model5_2 <- lm(math4 ~lmedinc + free, data = meapsingle)
+stargazer(model5_2, type = "text")
+```
+It decreases significantly because other important variables are being controlled for. It seems that free lunch is a much better indicator of math scores.   
+
+### Part iii
+```{r}
+cor(meapsingle$lmedinc,meapsingle$free)
+```
+The sample correlation between $lmedinc$ and $free$ is `r round(cor(meapsingle$lmedinc,meapsingle$free),4)`
+Yes, it ahs the sign I expected. The higher a family's income, the less likely they will be to receive free lunch at school. 
+
+### Part iv
+
+I don't think the correlation between $lmedinc$ and $free$ are enough to justify dropping one of them on its own. The $R^2$ variable should also be considered. If we remove it without deeper analysis, we may be underspecifying the model and introducing unnecessary bias. 
+
+### Part v
