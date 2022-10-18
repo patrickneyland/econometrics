@@ -6,7 +6,7 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(comments = NA, options(scipen = 999))
+knitr::opts_chunk$set(comment = NA, options(scipen = 999))
 library(wooldridge)
 library(stargazer)
 library(tidyverse)
@@ -90,3 +90,68 @@ Yes, it ahs the sign I expected. The higher a family's income, the less likely t
 I don't think the correlation between $lmedinc$ and $free$ are enough to justify dropping one of them on its own. The $R^2$ variable should also be considered. If we remove it without deeper analysis, we may be underspecifying the model and introducing unnecessary bias. 
 
 ### Part v
+Watch class from 10/13 and look at the lecture R scripts
+
+## Question 6
+### Part i
+```{r}
+x <- range(htv$educ)
+diff(x)
+tb1 <- table(htv$educ==12)
+ptb1 <- prop.table(tb1)*100
+ptb1[2]
+avg_educ <- round(mean(htv$educ),2)
+avg_peduc <- round(mean(htv$motheduc + htv$fatheduc)/2,2)
+```
+The range of the $educ$ variable in the sample is `r diff(x)`.   
+`r round(ptb1[2],2)` percent of men completed the twelfth grade but no higher.    
+Average $educ$ is `r avg_educ` and the average parent education is `r avg_peduc`---on average, men have higher levels of education than their parents. 
+
+### Part ii
+```{r}
+model6_2 <- lm(educ ~ motheduc + fatheduc, data = htv)
+stargazer(model6_2, type = "text")
+```
+24.9 percent of the sample variation in $educ$ is explained by parents' education. Ceteris paribus, if $motheduc$ increases by 1 year, $educ$ will increase by 0.304 years on average.   
+### Part iii
+```{r}
+model6_3 <- lm(educ ~ motheduc + fatheduc + abil, data = htv)
+stargazer(model6_3, type = "text")
+```
+$\hat{educ} = 8.449 + 0.189\ motheduc + 0.111\ fatheduc + 0.502\ abil$
+Yes, "ability" helps explain variations in education because it is relevant and not perfectly correlated with parents education. This is evidenced by the improve $R^2$ in part iii over the $R^2$ in part ii. 
+
+### Part iv
+```{r}
+abil_squared <- htv$abil^2
+model6_4 <- lm(educ ~ motheduc + fatheduc + abil + abil_squared, data = htv)
+stargazer(model6_4, type = "text")
+```
+Leaving out other independent variables because they have no effect. 
+$$\hat{educ} = 8.240 + 0.401\ abil + 0.051\ abil^2$$
+$$\hat{educ}' = 0.401 + 0.102\ abil$$
+Set $\hat{educ}$ equal to zero. 
+$$0 = 0.401 + 0.102\ abil$$
+$$ = \frac{-0.401}{0.102\ abil}$$
+$abil^*$ is equal to `r round(-0.401/0.102, 2)`. $educ$ is minimized when $abil$ is `r round(-0.401/0.102, 2)`.
+$$\hat{educ}'' = 0.102$$
+Because the second derivative is positive, the critical value (`r round(-0.401/0.102, 2)`) is a minimum.
+
+### Part v
+```{r}
+-0.401/0.102
+tb2 <- table(htv$abil<(-0.401/0.102))
+ptb2 <- prop.table(tb2)*100
+ptb2[2]
+```
+From the data, only `r round(ptb2[2],2)` percent of men have an $abil$ less than -3.931.
+
+### Part vi
+```{r}
+peduc_tot <- 12.18*.190 + .109*12.45
+curve( peduc_tot + 0.401*x + 0.051*x^2, from=-4, to=7, n=500, 
+       xlab="Ability", ylab="Years of Education", 
+       col="blue", lwd=2, 
+       main="Predicted Education based on Ability"  )
+```
+
