@@ -10,6 +10,7 @@ knitr::opts_chunk$set(comment = NA, options(scipen = 999))
 library(wooldridge)
 library(stargazer)
 library(tidyverse)
+library(car)
 ```
 
 ## Question 1
@@ -47,14 +48,21 @@ Because SER is controlling for RBIs. less variance in sigma squared
 Yeah, it makes sense. Having a little more experience can help someone have more RBIs, However
 
 Variance inflation factor
-VIF_year = 1/(1-R^2_year)
-Cor(yr,rbiyr) = 0.487
-R^2 = [Cor(yr,rbiyr)]^2
-R^2 = 0.487^2
-VIF_year = 1/(1-0.237)
+$$VIF_{year} = 1/(1-R^2_{year})$$
+$$Cor(yr,rbiyr) = 0.487$$
+$$R^2 = [Cor(yr,rbiyr)]^2$$
+$$R^2 = 0.487^2$$
+$$R^2 = 0.237$$
+$$VIF_{year} = 1/(1-0.237)$$
+$$VIF_{year} = 1.311$$
+I would say there is moderate collinearity between $years$ and $rbisyr$. 
+
 
 ```{r}
 1/(1-0.237)
+0.487^2
+model3_3 <- lm(lsalary ~ years + rbisyr, data = mlb1)
+vif(model3_3)
 ```
 
 ### Part iii
@@ -63,7 +71,7 @@ Because the signma squared are different.
 Square the SER to get Sigma^2
 
 Because we are transition from the
-
+This is because the multicollinearity with large increase in explanatory power. This is rare and usually there's a trade-off between the number of variables and variance. 
 
 ## Question 4
 ### Part i
@@ -105,6 +113,10 @@ I don't think the correlation between $lmedinc$ and $free$ is enough to justify 
 
 ### Part v
 Watch class from 10/13 and look at the lecture R scripts
+```{r}
+vif(model5_2)
+```
+$pcrsgle$ has the largest VIF, which is 5.741. No, it does not change which model I would use. 
 
 ## Question 6
 ### Part i
@@ -133,7 +145,7 @@ stargazer(model6_2, type = "text")
 model6_3 <- lm(educ ~ motheduc + fatheduc + abil, data = htv)
 stargazer(model6_3, type = "text")
 ```
-$\hat{educ} = 8.449 + 0.189\ motheduc + 0.111\ fatheduc + 0.502\ abil$
+$$\hat{educ} = 8.449 + 0.189\ motheduc + 0.111\ fatheduc + 0.502\ abil$$
 Yes, "ability" helps explain variations in education because it is relevant and not perfectly correlated with parents education. This is evidenced by the improve $R^2$ in part iii over the $R^2$ in part ii. 
 
 ### Part iv
@@ -164,7 +176,7 @@ From the data, only `r round(ptb2[2],2)` percent of men have an $abil$ less than
 ### Part vi
 ```{r}
 peduc_tot <- 12.18*.190 + .109*12.45
-curve( peduc_tot + 0.401*x + 0.051*x^2, from=-4, to=7, n=500, 
+curve( 8.240 + peduc_tot + 0.401*x + 0.051*x^2, from=-4, to=7, n=500, 
        xlab="Ability", ylab="Years of Education", 
        col="blue", lwd=2, 
        main="Predicted Education based on Ability"  )
