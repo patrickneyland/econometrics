@@ -13,25 +13,27 @@ library(tidyverse)
 ```
 
 ## Question 1
-
-end of recording on 10/11 
 ### Part i
-$\theta$ is unbiased. Expected value of theta hat is equal to theta hat. 
-theta hat is equal to beta hat 1 + beta hat 2
-E(theta hat) = E(beta hat 1 +beta hat 2)
-= E(beta hat 1) E(beta hat 2)
-= beta 1 + beta 2 = theta
+If $\theta$ is unbiased, then the expected value of theta hat is equal to theta. 
+$$\hat{\theta_1} = \hat{\beta_1} + \hat{\beta_2}$$
+$$E(\hat{\theta_1}) = E(\hat{\beta_1} + \hat{\beta_2})$$
+$$= E(\hat{\beta_1}) +  E(\hat{\beta_2})$$
+$$= \hat{\beta_1} + \hat{\beta_2}$$
+$$= \hat{\theta_1}$$
 
 ### Part ii
+
+$$Var(\hat{\theta_1}) = Var(\hat{\beta_1} + \hat{\beta_2})$$
+$$= Var(\hat{\beta_1}) +  Var(\hat{\beta_2}) + 2Cov(\hat{\beta_1},\hat{\beta_2})$$
+$$= Var(\hat{\beta_1}) +  Var(\hat{\beta_2}) + 2(\frac{Cov(\hat{\beta_1},\hat{\beta_2})}{{\sigma_{\hat\beta_1}*{\sigma_{\hat\beta_2}}}})$$
+$$= Var(\hat{\beta_1}) +  Var(\hat{\beta_2}) + 2{\sigma_{\hat{\beta_1}}{\sigma_\hat{\beta_2}}}Cor(\hat{\beta_1},\hat{\beta_2})$$
 going from cov to corr
 Define unbiasedness
 
-### Part ii
-
 
 ## Question 2
-
-The bias will be negative because I think avg ability will be positive and the correlation between variables is negative. 
+pg. 79 Wooldridge 6e
+The bias will likely be negative because I think avg ability($\beta_2$) will be positive and, as stated in the problem, correlation between variables is negative. 
 
 
 
@@ -39,10 +41,10 @@ The bias will be negative because I think avg ability will be positive and the c
 ### Part i
 Model 1 has df of 351
 Model 2 has df of 350
-Because SER is controlling for RBIS. less variance in sigma squared
+Because SER is controlling for RBIs. less variance in sigma squared
 
 ### Part ii
-Yeah, it makes sense. While having a little more experience can help someone have more RBIs, However
+Yeah, it makes sense. Having a little more experience can help someone have more RBIs, However
 
 Variance inflation factor
 VIF_year = 1/(1-R^2_year)
@@ -63,6 +65,18 @@ Square the SER to get Sigma^2
 Because we are transition from the
 
 
+## Question 4
+### Part i
+Yes, I think holding sleep, work, and leisure fixed while changing study makes sense. 
+
+### Part ii
+Is it because they all sum to 168. They are all part of the same variable---time. This leads to perfect collinearity among the independent variables. 
+
+### Part iii
+Dropping one of the variables would satisfy MLR.3
+
+
+
 ## Question 5
 ### Part i
 ```{r}
@@ -73,7 +87,7 @@ The effect of single parenthood seems large.
 
 ### Part ii
 ```{r}
-model5_2 <- lm(math4 ~lmedinc + free, data = meapsingle)
+model5_2 <- lm(math4 ~ pctsgle +lmedinc + free, data = meapsingle)
 stargazer(model5_2, type = "text")
 ```
 It decreases significantly because other important variables are being controlled for. It seems that free lunch is a much better indicator of math scores.   
@@ -83,11 +97,11 @@ It decreases significantly because other important variables are being controlle
 cor(meapsingle$lmedinc,meapsingle$free)
 ```
 The sample correlation between $lmedinc$ and $free$ is `r round(cor(meapsingle$lmedinc,meapsingle$free),4)`
-Yes, it ahs the sign I expected. The higher a family's income, the less likely they will be to receive free lunch at school. 
+Yes, it has the sign I expected. The higher a family's income, the less likely they will be to receive free lunch at school. 
 
 ### Part iv
 
-I don't think the correlation between $lmedinc$ and $free$ are enough to justify dropping one of them on its own. The $R^2$ variable should also be considered. If we remove it without deeper analysis, we may be underspecifying the model and introducing unnecessary bias. 
+I don't think the correlation between $lmedinc$ and $free$ is enough to justify dropping one of them on its own. The $R^2$ variable should also be considered. If we remove it without deeper analysis, we may be underspecifying the model and introducing unnecessary bias. 
 
 ### Part v
 Watch class from 10/13 and look at the lecture R scripts
@@ -98,6 +112,7 @@ Watch class from 10/13 and look at the lecture R scripts
 x <- range(htv$educ)
 diff(x)
 tb1 <- table(htv$educ==12)
+mean(htv$educ==12)
 ptb1 <- prop.table(tb1)*100
 ptb1[2]
 avg_educ <- round(mean(htv$educ),2)
