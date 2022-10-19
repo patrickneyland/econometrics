@@ -66,12 +66,7 @@ vif(model3_3)
 ```
 
 ### Part iii
-Because the signma squared are different. 
-
-Square the SER to get Sigma^2
-
-Because we are transition from the
-This is because the multicollinearity with large increase in explanatory power. This is rare and usually there's a trade-off between the number of variables and variance. 
+Because the value of $\hat\sigma^2$ in model 2 is much smaller $\hat\sigma^2$ in model 1. This is a rare occurrence and will decrease in likelihood as more variables are added.
 
 ## Question 4
 ### Part i
