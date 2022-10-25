@@ -6,12 +6,121 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+library(tidyverse)
+library(wooldridge)
+library(stargazer)
+library(car)
 ```
 
+## Question 1
+(i) and (iii) can cause the usual OLS t statistic to be invalid. 
+
+## Question 2
+### Part i
+$H_0: \beta_3 = 0$ $H_1: \beta_3 = 0$
+### Part ii
+All positive
+
+### Part iii
+10 percent increase in pop will reult in .66 percent increase in rent. 
+
+### Part iv
+$\alpha = 1%$
+
+t = ,0056 - 0 / 0.0017 = 56/17 = 3.294
+```{r}
+pt(3.294, 60, lower.tail = FALSE)
+```
+Easily reject the null
+
+`r pt(3.294, 60) `
+
+or 
+
+calculate the critical value. |t| > |c| ?
+
+## Question 3
+
+var(betahat1) + var(9betahat2) - 6cov(beathat1, beathat2)
+
+## Question 5
+### Part i
+```{r}
+df <- filter(k401ksubs, fsize == 1)
+length(df$fsize)
+```
+The $k402ksubs$ data set contains 2017 single person households. 
+
+
+### Part ii
+```{r}
+model5_2 <- lm(nettfa ~ inc + age, data = df)
+stargazer(model5_2, type = "text")
+```
+No, there are no surprises in the the slope estimates. 
+
+### Part iii
+
+I think it shows that a lot of people start out with a lot of debt early in their careers---student loans, mortgage, etc. 
+
+### Part iv
 
 ```{r}
-qt(.9,2)
-pt(1.885618,2)
+
 ```
+### Part v
+```{r}
+model5_5 <- lm(nettfa ~ inc, data = df)
+stargazer(model5_5, type = "text")
+```
+The estimated coefficient on $inc$ is not much different from the estimate in part ii. 
+
+## Question 6 
+### Part i
+```{r}
+model6_1 <- lm(log(psoda) ~ prpblck + log(income) + prppov, data = discrim)
+stargazer(model6_1, type = "text")
+```
+Yes, $\hat{\beta_1}$ is statistically different from zero at a 5% level in a two-sided test. However, it is not significant at the 1% level.
+
+### Part ii
+```{r}
+df1 <- na.omit(discrim)
+cor(df1$lincome, df1$prppov)
+cor(log(df1$income), df1$prppov)
+summary(model6_1)
+```
+The correlation between $log(income)$ and $prppov$ is -0.847
+Yes, each of the variables is statistically significant.
+
+| Variable    | p-value |   |   |   |
+|-------------|---------|---|---|---|
+| prpblck     | 0.018   |   |   |   |
+| log(income) | 0.000   |   |   |   |
+| prppov      | 0.004   |   |   |   |
+
+```{r}
+#df <- mutate()
+model6_3 <- lm(log(psoda) ~ prpblck + I(prpblck+prppov) + log(income), data = discrim)
+stargazer(model6_1, model6_3, type = "text")
+```
+
+```{r}
+linearHypothesis(model6_1, c("prpblck = 0", "prppov = 0"))
+```
+### Part iv
+```{r}
+model6_4 <- lm(log(psoda) ~ prpblck + log(income) + 
+                 prppov + log(hseval), data = discrim)
+stargazer(model6_4, type = "text")
+summary(model6_4)
+```
+Ceteris peribus, as the $hseval$ increases by 1%, $psoda$ increases by 0.121% on average.  The two-sided p-value for $H_0: \beta_{log(hseval)}=0$ is 2.67e-11.
+
+### Part v
+```{r}
+linearHypothesis(model6_4, c("prpblck-prppov=0"))
+```
+
 
