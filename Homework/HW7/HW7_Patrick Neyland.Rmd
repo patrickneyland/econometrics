@@ -20,29 +20,58 @@ library(car)
 ### Part i
 $H_0: \beta_3 = 0$ $H_1: \beta_3 = 0$
 ### Part ii
-All positive
-
+I expect both $\beta_1$ and $beta_2$ to be positive. 
 ### Part iii
-10 percent increase in pop will reult in .66 percent increase in rent. 
+10 percent increase in pop will result in .66 percent increase in rent, not 6.6 percent as stated in the problem. Because it is a log-log equation, there is no scaling of the coefficients. 
 
 ### Part iv
-$\alpha = 1%$
+```{r}
+.0056/.0017
+qt(.99, 60)
+```
+$$t = \frac{0.0056-0}{0.0017} = 3.294$$
+$$c = 2.39$$
+Because $t > c$ we reject the null hypothesis at the 1% significance level. 
 
-t = ,0056 - 0 / 0.0017 = 56/17 = 3.294
+Or we can compute the p-value. 
+
 ```{r}
 pt(3.294, 60, lower.tail = FALSE)
 ```
-Easily reject the null
+Easily reject the null because the p-value(0.00083) is less than 0.01($\alpha$)
 
-`r pt(3.294, 60) `
-
-or 
-
-calculate the critical value. |t| > |c| ?
 
 ## Question 3
-
+### Part i
 var(betahat1) + var(9betahat2) - 6cov(beathat1, beathat2)
+
+
+
+### Part ii
+
+### Part iii
+
+$y = (\beta_1 - 3\beta_2) + \beta_3$
+
+
+## Question 4 
+### Part i
+### Part ii
+q = 2
+$F = \frac{209,444.99 - 165,644.51/2}{165,644.51/86}$
+```{r}
+((209444.99-165644.51)/2)/(165644.51/86)
+
+1 - pf(11.37026, 2, 86)
+```
+### Part iii
+$F = \frac{.829 - .820 / 3}{1-.829/83}$
+```{r}
+(.829)
+```
+
+
+### Part iv
 
 ## Question 5
 ### Part i
@@ -67,8 +96,9 @@ I think it shows that a lot of people start out with a lot of debt early in thei
 ### Part iv
 
 ```{r}
-
+linearHypothesis(model5_2, "age=1")
 ```
+The p-value is 0.08743. At the 1% signigicance level, we do not reject the null hypothesis $H_0: \beta_2 = 1$
 ### Part v
 ```{r}
 model5_5 <- lm(nettfa ~ inc, data = df)
