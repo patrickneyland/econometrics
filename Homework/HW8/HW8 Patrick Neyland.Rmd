@@ -1,0 +1,50 @@
+---
+title: "HW8 Patrick Neyland"
+author: "Patrick Neyland"
+date: '2022-10-27'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(wooldridge)
+library(stargazer)
+library(car)
+```
+
+## Question 1
+Positive bias if you drop risktolerance
+
+## Question 2
+```{r}
+model1_1 <- lm(wage ~ educ + exper + tenure, data = wage1)
+model1_2 <- lm(log(wage) ~ educ + exper + tenure, data = wage1)
+res_model1_1 <- resid(model1_1)
+res_model1_2 <- resid(model1_2)
+hg1 <- hist(res_model1_1, breaks = 20)
+hg2 <- hist(res_model1_2, breaks = 20, c = "blue")
+plot(hg1)
+plot.new(hg2)
+plot(density(res_model1_1))
+
+stargazer(model1_1, type = "text")
+```
+
+# how to add a histagram to an existing one in R---two histagrams on one plot
+
+
+## Question 3
+### Part i
+0-100
+```{r}
+range(econmath$score)
+```
+
+```{r}
+reg3_1 <- lm(score ~ colgpa +actmth + acteng, econmath)
+vif(reg3_1)
+hist(reg3_1$residuals)
+plot(density(reg3_1$residuals))
+```
+### Part ii
+We don't need MLR.6 if the sample size is large enough. The central limit theorem kicks in and the distribution of the error term does not matter. 

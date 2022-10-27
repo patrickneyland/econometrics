@@ -58,11 +58,19 @@ $t = \frac{(\hat\beta_1-3\hat\beta_2)-1}{se(\hat\beta_1-3\hat\beta_2)-1}$
 
 ### Part iii
 
-$\hat y = (\beta_1 - 3\beta_2) + \beta_3$
+$\hat y = \hat\beta_0 + (\hat\beta_1 - 3\hat\beta_2) + \hat\beta_2 + \hat\beta_3$
 
 
 ## Question 4 
 ### Part i
+H_0 fail to reject
+H_1 fail to reject 
+```{r}
+qt(.95, 86)
+```
+
+
+
 ### Part ii
 q = 2   
 $F = \frac{209,444.99 - 165,644.51/2}{165,644.51/86}$
@@ -70,12 +78,16 @@ $F = \frac{209,444.99 - 165,644.51/2}{165,644.51/86}$
 ((209444.99-165644.51)/2)/(165644.51/86)
 1 - pf(11.37026, 2, 86)
 ```
+Reject null hypothesis. They are jointly significant. 
+
 
 ### Part iii
 $F = \frac{.829 - .820 / 3}{1-.829/83}$
 ```{r}
 ((.829-.820)/3)/(1-(.829/83))
+pf(.003030266, 3, 83)
 ```
+Reject null hypothesis. 
 
 ### Part iv
 Homoscedasticity assumption is violated. You cannot count on the f-statistic to fit the F distribution---you cannot rely on the F test.
@@ -85,6 +97,7 @@ Homoscedasticity assumption is violated. You cannot count on the f-statistic to 
 ```{r}
 df <- filter(k401ksubs, fsize == 1)
 length(df$fsize)
+dim(df)
 ```
 The $k401ksubs$ data set contains 2017 single person households. 
 
@@ -98,14 +111,14 @@ No, there are no surprises in the the slope estimates.
 
 ### Part iii
 
-I think it shows that a lot of people start out with a lot of debt early in their careers---student loans, mortgage, etc. 
+No, there is no interesting meaning. The interpretation would be the net financial position for new-born babies with an income of zero.  
 
 ### Part iv
 
 ```{r}
 linearHypothesis(model5_2, "age=1")
 ```
-The p-value is 0.08743. At the 1% signigicance level, we do not reject the null hypothesis $H_0: \beta_2 = 1$
+The p-value is 0.08743. At the 1% significance level, we do not reject the null hypothesis $H_0: \beta_2 = 1$
 ### Part v
 ```{r}
 model5_5 <- lm(nettfa ~ inc, data = df)
