@@ -172,5 +172,5 @@ Ceteris paribus, as the $hseval$ increases by 1%, $psoda$ increases by 0.121% on
 ```{r}
 linearHypothesis(model6_4, c("prpblck-prppov=0"))
 ```
-
+Do not reject the null hypothesis.
 

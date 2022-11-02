@@ -1,0 +1,26 @@
+---
+title: "HW9 Patrick Neyland"
+author: "Patrick Neyland"
+date: '2022-11-01'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+### Part i
+
+### Part ii
+$H_0 \beta_{sales^2} = 0$
+if alpha is greater than .069, then reject the null hypothesis. I will keep it because it is close to being significant in most cases. 
+
+
+
+t = .000000007/.000000037 = 70/37
+```{r}
+70/37
+pt(-1.891892, 29)*2
+```
+

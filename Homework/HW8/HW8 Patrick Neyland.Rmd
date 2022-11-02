@@ -2,7 +2,7 @@
 title: "HW8 Patrick Neyland"
 author: "Patrick Neyland"
 date: '2022-10-27'
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -13,38 +13,47 @@ library(car)
 ```
 
 ## Question 1
-Positive bias if you drop risktolerance
+Positive bias if you drop risk tolerance
 
 ## Question 2
+### Part i
 ```{r}
 model1_1 <- lm(wage ~ educ + exper + tenure, data = wage1)
-model1_2 <- lm(log(wage) ~ educ + exper + tenure, data = wage1)
 res_model1_1 <- resid(model1_1)
-res_model1_2 <- resid(model1_2)
-hg1 <- hist(res_model1_1, breaks = 20)
-hg2 <- hist(res_model1_2, breaks = 20, c = "blue")
-plot(hg1)
-plot.new(hg2)
-plot(density(res_model1_1))
-
-stargazer(model1_1, type = "text")
+hist(res_model1_1, breaks = 20)
 ```
 
-# how to add a histagram to an existing one in R---two histagrams on one plot
+### Part ii
+```{r}
+model1_2 <- lm(log(wage) ~ educ + exper + tenure, data = wage1)
+res_model1_2 <- resid(model1_2)
+hist(res_model1_2, breaks = 20, c = "blue")
+```
+
+### Part iii
+I believe that MLR.6 is closer to being satisfied in the log-level model
 
 
 ## Question 3
 ### Part i
-0-100
+Logically, the range of scores would be 0 to 100.
 ```{r}
 range(econmath$score)
 ```
+In the sample, the scores range form 19.53 to 98.44. 
 
+### Part ii
 ```{r}
 reg3_1 <- lm(score ~ colgpa +actmth + acteng, econmath)
-vif(reg3_1)
 hist(reg3_1$residuals)
-plot(density(reg3_1$residuals))
 ```
-### Part ii
+Because the histogram for the residuals is not normally distributed. This means that the t-statistic is not going to have a t distribution. 
+
+
+### Part iii
+
+```{r}
+summary(reg3_1)
+```
+The t-stat is `r 0.052/0.111`. The p-value is 0.641. 
 We don't need MLR.6 if the sample size is large enough. The central limit theorem kicks in and the distribution of the error term does not matter. 
