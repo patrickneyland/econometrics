@@ -1,0 +1,13 @@
+---
+title: "Final Markdown"
+author: "Mike Kelly, Patrick Neyland, and Andrew Withers"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r}
+library(readr)
+turnover <- read_csv("turnover.csv")
+head(turnover)
+```
+
