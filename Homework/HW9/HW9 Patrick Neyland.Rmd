@@ -6,15 +6,17 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
 ```
 
 ## Question 1
 ### Part i
+Take the first derivative with respect to sales, then set that equal to zero. $0.0003/0.00000014 = 21428.57$ this is when the marginal effect becomes zero. 
+
 
 ### Part ii
 $H_0 \beta_{sales^2} = 0$
-if alpha is greater than .069, then reject the null hypothesis. I will keep it because it is close to being significant in most cases. 
+If alpha is greater than .069, then reject the null hypothesis. I will keep it because it is close to being significant in most cases. 
 
 
 
@@ -23,4 +25,66 @@ t = .000000007/.000000037 = 70/37
 70/37
 pt(-1.891892, 29)*2
 ```
+### Part iii
 
+$\hat{rdintens} = 2.613 + 0.3salesbil - 0.000007salesbil$
+
+error terms: 0.429, .14, 0.0000037
+
+R^2 = 0.1484
+
+### Part iv
+
+I would prefer the latter model. It is easier to interpret and the $R^2$ stays the same. 
+
+## Question 2
+
+I would prefer the second model because it have the highest adjusted $R^2$
+
+```{r}
+library(wooldridge)
+library(tidyverse)
+library(stargazer)
+```
+## Question 3
+### Part i
+
+I expect it to be positive. As distance from the incinerator increases, price should also increase. 
+
+### Part ii
+
+```{r}
+model3_2 <- lm(log(price)~log(dist)+log(intst)+log(area)+log(land)+rooms+baths+age, data = kielmc)
+stargazer(model3_2 , type = "text")
+```
+The model shows that the distance from the incinerator does not have a significant effect on price. 
+
+### Part iii
+
+```{r}
+lintst_squared <- (log(kielmc$intst))^2
+model3_3 <- lm(log(price)~log(dist)+log(intst) + lintst_squared +log(area)+log(land)+rooms+baths+age, data = kielmc)
+stargazer(model3_3 , type = "text")
+```
+The addition corrects the sign of log(dist) and makes all independent variables significant. 
+
+### Part iv
+Yes
+
+## Question 4
+### Part i
+The model can be reparameterized:
+$$y = \alpha_0 +\delta_1x_1 + \delta_2x_2 + \beta_3(x_1 - \mu_1)(x_2 - \mu_2)+u$$
+Accoring to Wooldridge, we can show that
+$$\delta_1 = \beta_1 + \beta_3exper$$
+
+
+### Part ii
+
+
+
+### Part iii
+
+
+
+### Part iv

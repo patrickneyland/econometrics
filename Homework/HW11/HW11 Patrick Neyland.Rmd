@@ -1,0 +1,32 @@
+---
+title: "HW11 - Patrick Neyland"
+author: "Patrick Neyland"
+date: '2022-11-17'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(wooldridge)
+library(tidyverse)
+```
+
+$$1-inlf = -0.586 + 0.0034nwifeinc - 0.038educ - 0.039 expr + 0.0006exper^2 + 0.016age + 0.262kidslt6 - 0.013 kidsage6$$
+R^2 no change in $R^2$
+
+
+
+$$Var(ax+by$$
+
+
+## Question 2
+### Part 1
+
+```{r}
+head(apple)
+df <- mutate(apple, ecobuy = ifelse(ecolbs>0, 1, 0 ))
+
+head(df)
+```
+
