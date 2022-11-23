@@ -5,9 +5,13 @@ date: "`r Sys.Date()`"
 output: word_document
 ---
 
-```{r}
-library(readr)
-turnover <- read_csv("turnover.csv")
-head(turnover)
+```{r include=FALSE}
+turnover <- read.csv("turnover.csv", stringsAsFactors=TRUE)
 ```
+
+
+```{r}
+str(turnover)
+```
+
 

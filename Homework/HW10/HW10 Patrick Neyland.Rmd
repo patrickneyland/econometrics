@@ -1,0 +1,78 @@
+---
+title: "HW10 Patrick Neyland"
+author: "Patrick Neyland"
+date: "11/22/2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+### 1
+Ceteris paribus, if the number of cigarettes per day increases by 10, the birth weight will decrease by 4% on average. 
+
+### 2
+A white child is expected to weigh 5.5% more than a nonwhite child, on average holding all else constant. 
+With a t-value of 4.23, yes—it is statistically significant. 
+
+### 3
+I don't think that the education of parents would be a great indicator of child birthweight. This feeling holds because $motheduc$ is not statistically significant. 
+
+### 4 
+The f statistic cannot be computed because the regressions use different samples. The regressions would have to be built using the same data to calculate the mentions F statistic
+
+
+## Question 2
+### 1
+Yes, these is plenty of evidence to include $hsize^2$ in the model--it is statistically significant. From the equation, the optimal school size is one that has a graduating class of 4.41 hundred students. 
+
+### 2
+Holding hsize fixed, the difference between nonblack females and nonblack males is 45.09 points. With a 
+t-stat close to 10, the difference is highly statistically significant. 
+
+### 3
+The estimated difference in SAT score between nonblack males and black males is 169.81 points. We reject the null hypothesis. 
+
+### 4
+The estimated difference in SAT score black females and nonblack females is 107.5 points. I would need to linearHypothesis test from R to test statistical significance. 
+
+```{r include=FALSE}
+library(wooldridge)
+library(stargazer)
+library(car)
+```
+## Question 3
+### 1
+```{r}
+model6_1 <- lm(log(wage)~educ + exper + tenure + married +
+                 black + south + urban, data = wage2)
+stargazer(model6_1, type = "text")
+```
+Holding other factors fixed, on average, the approximate difference in monthly salary between blacks and nonblacks is 18.8%--with nonblacks being on the upper side of that difference. This difference is statistically significant. 
+
+### 2
+```{r}
+model6_2 <- lm(log(wage)~educ + exper + I(exper^2) + tenure + I(tenure^2) + 
+               + married + black + south + urban, data = wage2)
+stargazer(model6_2, type = "text")
+linearHypothesis(model6_2, c("I(exper^2)", "I(tenure^2)"))
+```
+They are not jointly significant even at 20%
+
+### Part 3
+```{r}
+model6_3 <- lm(log(wage)~educ + exper + tenure + married +
+                 black + south + urban + educ:black, data = wage2)
+stargazer(model6_3, type = "text")
+```
+Because the coefficient of $educ:black$ is not significant, we can see that the return to 
+education does not depend on race. 
+
+```{r}
+model6_4 <- lm(log(wage)~educ+exper+tenure+south+urban+I(married*(1-black))
+               +I((1-married)*black)+I((1-married)*(1-black)), wage2)
+stargazer(model6_4, type = "text")
+```
+The estimated wage differential between married blacks and married nonblacks is 17.9%
