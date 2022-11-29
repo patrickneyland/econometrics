@@ -14,4 +14,4 @@ turnover <- read.csv("turnover.csv", stringsAsFactors=TRUE)
 str(turnover)
 ```
 
-
+Start with bptest() to check for heteroskidasticity. 

@@ -29,4 +29,5 @@ df <- mutate(apple, ecobuy = ifelse(ecolbs>0, 1, 0 ))
 
 head(df)
 ```
+### Part 2
 

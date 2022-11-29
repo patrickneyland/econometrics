@@ -1,0 +1,32 @@
+---
+title: "HW12 Patrick Neyland"
+author: "Patrick Neyland"
+date: "12/6/2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Question 1
+## Question 2
+## Question 3
+## Question 4
+## Question 5
+## Question 6
+```{r}
+
+```
+
+## Question 7
+```{r}
+
+```
+
+## Question 8
+```{r}
+
+```
+
