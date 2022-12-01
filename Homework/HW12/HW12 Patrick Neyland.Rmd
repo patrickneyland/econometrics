@@ -11,11 +11,65 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Question 1
+Statements 2 and 3 are consequences. 
+
 ## Question 2
+$\frac{beer}{inc} = \beta_0 + \beta_1inc + \beta_2price + \beta_3educ + \beta_4female$
+
+y* = 
+
+$\sqrt(h(inc)) = sqrt(inc^2) = inc$
+
+divide everything by income. 
+
 ## Question 3
+False
+
 ## Question 4
+### Part 1
+numerator df = k+1
+denominator df = n-k-2
+
+### Part 2
+Because there are more explanatory variables on the right-hand side.
+
+
+### Part 3
+F depends on 3 things-- R^2\hatu^2, n, k
+
+
+### Part 4
+$\hat{u}
+
+Something is wrong. Because \haty is a perfect linear combination of all x variables. This presents perfect colinearity. 
+
+```{r}
+library(wooldridge)
+library(stargazer)
+
+```
+
 ## Question 5
+
+### Part 1
+$$Var(u|male) = \delta_0 + \delta_1male$$
+### Part 2
+```{r}
+model5_2 <- lm(sleep~ totwrk + educ + age + I(age^2) +yngkid + male, sleep75)
+stargazer(model5_2, type = "text")
+
+
+u_hat <- resid(model5_2)
+
+reg_var <- lm(I(u_hat^2) ~ male, sleep75)
+
+stargazer(reg_var, type = "text")
+```
+### Part 3
+It was higher for women but it was not significant. 
+
 ## Question 6
+### Part 1
 ```{r}
 
 ```
@@ -27,6 +81,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Question 8
 ```{r}
-
+lm(e401k ~ inc + I(inc^2) + age + I(age^2) + male, k401ksubs)
 ```
 

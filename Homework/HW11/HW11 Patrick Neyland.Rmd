@@ -6,28 +6,75 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
 
 library(wooldridge)
 library(tidyverse)
+library(stargazer)
+library(car)
 ```
 
-$$1-inlf = -0.586 + 0.0034nwifeinc - 0.038educ - 0.039 expr + 0.0006exper^2 + 0.016age + 0.262kidslt6 - 0.013 kidsage6$$
-R^2 no change in $R^2$
+
+## Question 1  
+### Part 1
+$$outlf = 1-0.586 + 0.0034nwifeinc - 0.038educ - 0.039 expr + 0.0006exper^2 + 0.016age + 0.262kidslt6 - 0.013 kidsage6$$
+The coefficients will all switch signs and the new intercept will be 0.414
+
+### Part 2
+Standard errors will not change. 
+### Part 3
+No change in $R^2$
 
 
 
 $$Var(ax+by$$
-
-
 ## Question 2
 ### Part 1
 
 ```{r}
-head(apple)
 df <- mutate(apple, ecobuy = ifelse(ecolbs>0, 1, 0 ))
+sum(df$ecobuy)/length(df$ecobuy)
 
-head(df)
 ```
-### Part 2
+The fraction of families who claim they would buy ecolabeled apples is 62.4%
 
+### Part 2
+```{r}
+MRM <- lm(ecobuy ~ ecoprc + regprc + faminc + hhsize + educ + age, df)
+stargazer(MRM, digits = 4, type = "text")
+```
+$$\hat{ecobuy}=.424 -.803ecoprc + .719regprc + .001faminc + .024hhsize + .025educ - .001age$$
+If ecoprc increases by 1 dollar, on average the likelihood of buying eco-labled apples decreases by 80.3 percent. If the regprc increases by 1 dollar, on average the likelihood of buying eco-labeled apples increases by 71.9 percent. 
+
+### Part 3
+```{r}
+linearHypothesis(MRM, c("faminc=0", "hhsize=0", "educ = 0", "age = 0"))
+```
+With a p-value of 0.0015, the non-price variables are jointly significant. Looking at the model, the $educ$ variable seems to have the most important effect. This makes sense to me, someone with more education may be more informed on the importance of purchasing and consuming eco-friendly produce. However, $educ$ also acts as proxy variable for other variables that are also more significant. 
+
+### Part 4
+```{r}
+MRM_log <- lm(ecobuy ~ ecoprc + regprc + log(faminc) + hhsize + educ + age, df)
+stargazer(MRM,MRM_log,  digits = 4, type = "text")
+```
+The log model has a slightly higher adjusted $R^2$ however, because the two different variables between the models are not statistically significant, I would say the models are about the same. In the second model, as faminc increases by 1 percent, ecobuy will increase by 0.00045.
+
+### Part 5
+```{r}
+sum(predict(MRM_log)<0)
+sum(predict(MRM_log)>1)
+
+summary(predict(MRM_log))
+```
+0 are negative and only 2 are above 1. We do not need to be concerned. 
+
+### Part 6
+
+```{r}
+confusion_matrix <- table(df$ecobuy, predict(MRM_log) >= 0.5)
+confusion_matrix
+```
+ecobuy = 0 | 102/(102+146) = .411 or 41.1%
+ecobuy = 1 | 340/(72+340) = .825 or 82.5% (better)
+Predicted correctly | (102 + 340)/(102+146+72+340) = 0.669 or 66.9%
+The ecobuy = 1 model does a better job of predicting the decision to buy eco-labeled apples. 
