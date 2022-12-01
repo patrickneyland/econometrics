@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: word_document
 ---
 
-```{r}
+```{r include=FALSE}
 library(lmtest)
 library(sandwich)
 library(car)
@@ -14,18 +14,6 @@ library(stargazer)
 
 ```{r include=FALSE}
 df <- read.csv("turnover.csv")
-```
-
-```{r}
-str(turnover)
-```
-
-Start with bptest() to check for heteroskidasticity. 
-
-```{r}
-df
-
-colnames(df)
 
 df$friends <- as.numeric(df$traffic == "friends")
 df$female <- as.numeric(df$gender == "f")
@@ -36,25 +24,24 @@ df$car <- as.numeric(df$way == "car")
 df$extraversion
 
 reg <- lm(event~age + I(age^2) + female + friends + retail + manufacturing + age:manufacturing + I(age^2):manufacturing + hr + car + anxiety, data = df)
-
-stargazer(reg, type = "text")
 ```
 
-friends
 
-manufacturing age
+## Introduction
 
-anxiety
+## Data
+
+## Emperical Framework
+
+## Results
+
+## Conclusion
+
 
 
 ```{r}
-
-
-summary(reg)
 vif(reg)
-
 bptest(reg)
-
 
 ### Non-robust SE
 
@@ -94,31 +81,3 @@ confusion <- prop.table(table("actual" = df$event, "predicted" = frame$predict))
 
 paste("Percent of quitters identified:", confusion[4]/(confusion[4] + confusion[2]), sep = " ")
 paste("Percent of stayers identified:", confusion[1]/(confusion[1] + confusion[3]), sep = " ")
-
-### Patrick, ignore this garbage down here.
-
-
-
-# Looking at model performance. It's a little better than a coin flip.
-
-frame <- df
-
-frame$predict <- as.numeric(logit_reg$fitted.values > 0.50)
-
-colnames(frame)
-
-
-summary(frame$event)
-summary(frame$predict)
-summary(frame$correct)
-
-confusion <- prop.table(table("actual" = frame$event, "predicted" = frame$predict))
-
-paste("Percent of quitters identified:", confusion[4]/(confusion[4] + confusion[2]), sep = " ")
-paste("Percent of stayers identified:", confusion[1]/(confusion[1] + confusion[3]), sep = " ")
-
-
-plot(density(logit_reg$fitted.values))
-abline(v = 0.5)
-hist(logit_reg$fitted.values)
-```
