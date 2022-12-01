@@ -1,0 +1,124 @@
+---
+title: "Final R Script"
+author: "Mike Kelly, Patrick Neyland, and Andrew Withers"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r}
+library(lmtest)
+library(sandwich)
+library(car)
+library(stargazer)
+```
+
+```{r include=FALSE}
+df <- read.csv("turnover.csv")
+```
+
+```{r}
+str(turnover)
+```
+
+Start with bptest() to check for heteroskidasticity. 
+
+```{r}
+df
+
+colnames(df)
+
+df$friends <- as.numeric(df$traffic == "friends")
+df$female <- as.numeric(df$gender == "f")
+df$retail <- as.numeric(df$industry == "Retail")
+df$manufacturing <- as.numeric(df$industry == "manufacture")
+df$hr <- as.numeric(df$profession == "HR")
+df$car <- as.numeric(df$way == "car")
+df$extraversion
+
+reg <- lm(event~age + I(age^2) + female + friends + retail + manufacturing + age:manufacturing + I(age^2):manufacturing + hr + car + anxiety, data = df)
+
+stargazer(reg, type = "text")
+```
+
+friends
+
+manufacturing age
+
+anxiety
+
+
+```{r}
+
+
+summary(reg)
+vif(reg)
+
+bptest(reg)
+
+
+### Non-robust SE
+
+coeftest(reg)
+
+### Robust standard errors.
+
+coeftest(reg, vcov = vcovHC(reg, type = "HC0"))
+
+
+# Splitting data to test out-of-sample performance.
+set.seed(11)
+index <- sample(c(TRUE, FALSE), size = dim(df)[1], replace=TRUE, prob=c(0.9,0.1))
+
+df_train <- df[index,]
+df_test <- df[!index,]
+
+
+reg_train <- lm(event~age + I(age^2) + female + friends + retail + manufacturing + age:manufacturing + I(age^2):manufacturing + hr + car + anxiety, data = df)
+
+
+coeftest(reg_train, vcov = vcovHC(reg, type = "HC0"))
+
+summary(reg_train$fitted.values)
+summary( predict(reg_train, newdata = df_test) )
+
+
+frame <- df
+
+frame$predict <- as.numeric(logit_reg$fitted.values > 0.50)
+
+colnames(frame)
+
+# Testing in-sample performance.
+
+confusion <- prop.table(table("actual" = df$event, "predicted" = frame$predict))
+
+paste("Percent of quitters identified:", confusion[4]/(confusion[4] + confusion[2]), sep = " ")
+paste("Percent of stayers identified:", confusion[1]/(confusion[1] + confusion[3]), sep = " ")
+
+### Patrick, ignore this garbage down here.
+
+
+
+# Looking at model performance. It's a little better than a coin flip.
+
+frame <- df
+
+frame$predict <- as.numeric(logit_reg$fitted.values > 0.50)
+
+colnames(frame)
+
+
+summary(frame$event)
+summary(frame$predict)
+summary(frame$correct)
+
+confusion <- prop.table(table("actual" = frame$event, "predicted" = frame$predict))
+
+paste("Percent of quitters identified:", confusion[4]/(confusion[4] + confusion[2]), sep = " ")
+paste("Percent of stayers identified:", confusion[1]/(confusion[1] + confusion[3]), sep = " ")
+
+
+plot(density(logit_reg$fitted.values))
+abline(v = 0.5)
+hist(logit_reg$fitted.values)
+```
