@@ -16,8 +16,6 @@ Statements 2 and 3 are consequences.
 ## Question 2
 $\frac{beer}{inc} = \beta_0 + \beta_1inc + \beta_2price + \beta_3educ + \beta_4female$
 
-y* = 
-
 $\sqrt(h(inc)) = sqrt(inc^2) = inc$
 
 divide everything by income. 
@@ -43,9 +41,12 @@ $\hat{u}
 
 Something is wrong. Because \haty is a perfect linear combination of all x variables. This presents perfect colinearity. 
 
-```{r}
+```{r include=FALSE}
 library(wooldridge)
 library(stargazer)
+library(lmtest)
+library(sandwich)
+library(car)
 
 ```
 
@@ -71,16 +72,53 @@ It was higher for women but it was not significant.
 ## Question 6
 ### Part 1
 ```{r}
+model6_1 <- lm(price ~ lotsize + sqrft + bdrms, hprice1)
 
+coeftest(model6_1)
+coeftest(model6_1, vcov = vcovHC(model6_1, type = "HC0"))
 ```
+The biggest difference is in the standard errors for lotsize. 
+
+### Part 2
+```{r}
+model6_2 <- lm(log(price) ~ log(lotsize) + log(sqrft) + bdrms, hprice1)
+
+coeftest(model6_2)
+coeftest(model6_2, vcov = vcovHC(model6_2, type = "HC0"))
+```
+The standard errors are not too different. 
+
+### Part 3
+
+The log transformation was successful in limiting the impacts of the heteroskedasticity found in the data.  
+
 
 ## Question 7
 ```{r}
+model7_1 <- lm(voteA ~ prtystrA + democA + log(expendA) + log(expendB), vote1)
+stargazer(model7_1, type = "text")
 
+bptest(model7_1)
+```
+```{r}
+u_hat <- resid(model7_1)
+#summary(lm( u_hat^2     ~ lotsize+sqrft+bdrms, data=hprice1))
 ```
 
 ## Question 8
+### Part 1
 ```{r}
-lm(e401k ~ inc + I(inc^2) + age + I(age^2) + male, k401ksubs)
-```
+model8_1 <- lm(e401k ~ inc + I(inc^2) + age + I(age^2) + male, k401ksubs)
 
+coeftest(model6_2)
+coeftest(model6_2, vcov = vcovHC(model6_2, type = "HC0"))
+```
+### Part 2
+```{r}
+weights <- k401ksubs$weights
+
+model8_2 <- lm(e401k ~ inc + I(inc^2) + age + I(age^2) + male, k401ksubs, weights = weights)
+
+summary(model8_2)
+```
+No important differences.
